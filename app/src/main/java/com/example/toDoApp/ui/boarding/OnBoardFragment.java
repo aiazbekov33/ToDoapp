@@ -78,6 +78,7 @@ public class OnBoardFragment extends Fragment {
                             SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(Constants.IS_SHOW_FILE, Context.MODE_PRIVATE);
                             sharedPreferences.edit().putBoolean(Constants.IS_SHOW,true).apply();
                             startActivity(new Intent(requireContext(), MainActivity.class));
+//                            requireActivity().finish();
 
                             Animation logoMoveAnimation = AnimationUtils.loadAnimation(requireContext(), R.anim.baunce_animation);
                             binding.startBtn.startAnimation(logoMoveAnimation);

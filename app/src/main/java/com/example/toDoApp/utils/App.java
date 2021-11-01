@@ -9,7 +9,7 @@ import com.example.toDoApp.ui.create.TaskAdapter;
 
 public class App extends Application {
     public static App instance;
-    private Database dataBase;
+    public static Database dataBase = null;
 
     @Override
     public void onCreate() {
@@ -17,10 +17,8 @@ public class App extends Application {
         instance = this;
         getInstance();
     }
-    public static App getInstance(){
-        return instance;
-    }
-    public Database getDataBase(){
+
+    public static Database getInstance(){
         if (dataBase == null){
             dataBase = Room.databaseBuilder(instance.getApplicationContext(),Database.class, "todo")
                     .fallbackToDestructiveMigration()

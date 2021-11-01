@@ -1,34 +1,36 @@
 package com.example.toDoApp.ui.create;
 
-import android.content.Intent;
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.toDoApp.databinding.ItemTaskBinding;
-import com.example.toDoApp.ui.home.OnClick;
+import com.example.toDoApp.interf.OnItemClickListener;
 
 import java.util.ArrayList;
 
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder> {
+
     ArrayList<TaskModel> list;
     ItemTaskBinding binding;
-    OnClick onClick;
+    OnItemClickListener onItemClickListener;
+
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+    }
 
     public TaskAdapter(ArrayList<TaskModel> list) {
         this.list = list;
-        notifyDataSetChanged();
     }
-    public void setOnClick(OnClick onClick){
-        this.onClick = onClick;
-    }
-    public  void delete(int position){
-        list.remove(position);
+
+    @SuppressLint("NotifyDataSetChanged")
+    public void delete(ArrayList<TaskModel> list) {
+        this.list=list;
         notifyDataSetChanged();
     }
 
@@ -50,6 +52,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
     }
 
 
+
     public class TaskViewHolder extends RecyclerView.ViewHolder {
         ItemTaskBinding binding;
         private OnClick onClick;
@@ -59,21 +62,18 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
             this.binding = binding;
 
         }
-        public void setOnClick(AdapterView.OnItemLongClickListener onItemLongClickListener){
-            this.onClick = onClick;
-        }
 
         public void onFill(TaskModel model) {
             binding.titleTv.setText(model.title);
             binding.timeTv.setText(model.time);
             binding.leftColorV.setBackgroundColor(model.color);
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-//                    onClick.onLongClickListener (model, getAdapterPosition());
-//                    return false;
-                }
-            });
+           itemView.setOnLongClickListener(new View.OnLongClickListener() {
+               @Override
+               public boolean onLongClick(View v) {
+                   onItemClickListener.onItemClick(model,getAdapterPosition());
+                   return false;
+               }
+           });
             Glide.with(binding.taskIm).load(model.image).centerCrop().into(binding.taskIm);
         }
     }
@@ -81,7 +81,6 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
 //    public void setOnClick (OnClick onClick){
 //        this.onClick = onClick;
 //    }
-
 
 
 }
